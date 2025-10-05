@@ -1,34 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <title>Unity Controller</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-    select { font-size: 20px; padding: 10px; }
-  </style>
+<meta charset="UTF-8">
+<title>Unity-Web Bridge</title>
+<script>
+async function sendData() {
+    const value = document.getElementById("inputValue").value;
+    const response = await fetch("/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value })
+    });
+    const result = await response.json();
+    alert("送信完了: " + result.status);
+}
+
+async function getData() {
+    const response = await fetch("/get");
+    const result = await response.json();
+    alert("現在の値: " + result.value);
+}
+</script>
 </head>
 <body>
-  <h1>Unityコントローラー</h1>
-  <select id="mySelect">
-    <option value="">選択してください</option>
-    <option value="A">Aを送信</option>
-    <option value="B">Bを送信</option>
-    <option value="C">Cを送信</option>
-  </select>
-
-  <script>
-    const serverUrl = window.location.origin;
-
-    document.getElementById('mySelect').addEventListener('change', (e) => {
-      if (!e.target.value) return;
-      fetch(`${serverUrl}/send`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({value: e.target.value})
-      });
-      alert(e.target.value + " を送信しました！");
-    });
-  </script>
+<h1>Unity-Web Bridge</h1>
+<input type="text" id="inputValue" placeholder="値を入力">
+<button onclick="sendData()">送信</button>
+<button onclick="getData()">取得</button>
 </body>
 </html>
